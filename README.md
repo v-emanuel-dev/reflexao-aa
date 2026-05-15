@@ -77,27 +77,3 @@ lib/
 public/
   manifest.webmanifest
 ```
-
-## Deploy na Vercel
-
-1. Suba o repositório para GitHub/GitLab/Bitbucket.
-2. Importe na Vercel.
-3. Use os padrões detectados para Next.js.
-4. Faça o deploy.
-
-## Observações técnicas
-
-- O scraping é feito server-side, nunca no navegador.
-- O conteúdo é cacheado por ISR/fetch revalidation.
-- A UI continua funcionando com fallback se a AARJ mudar o HTML.
-- A navegação anterior/próxima ainda usa exemplos locais; o próximo passo seria persistir histórico diário em banco ou CMS.
-
-## Evolução sugerida
-
-- Persistir cada reflexão diária em Supabase, Vercel KV ou Postgres.
-- Criar histórico real em `/reflexoes/[slug]`.
-- Adicionar monitoramento quando o parser usar fallback.
-- Criar sitemap/RSS baseado no histórico persistido.
-- Gerar imagens Open Graph dinâmicas.
-- Transformar em PWA com cache offline.
-# reflexao-aa
