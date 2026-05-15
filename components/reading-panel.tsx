@@ -26,35 +26,31 @@ export function ReadingPanel({ reflection }: { reflection: Reflection }) {
               <p className="text-sm uppercase tracking-[0.25em] text-ocean-700 dark:text-ocean-200">
                 Leitura guiada
               </p>
-              <h2 className="mt-2 font-serif text-3xl text-slate-950 dark:text-white">
+              <h2 className="mt-2 break-words text-2xl font-semibold text-slate-950 dark:text-white md:text-3xl">
                 {reflection.title}
               </h2>
             </div>
             <FocusModeToggle enabled={focusMode} onChange={setFocusMode} />
           </div>
 
-          <blockquote className="mb-8 rounded-3xl bg-mist p-6 font-serif text-2xl leading-9 text-slate-900 dark:bg-white/5 dark:text-slate-100">
-            “{reflection.quote}”
+          <blockquote className="mb-8 rounded-3xl bg-mist p-6 text-xl leading-8 text-slate-900 dark:bg-white/5 dark:text-slate-100 md:text-2xl md:leading-9">
+            “{reflection.excerpt}”
+            <footer className="mt-4 text-sm font-normal uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              {reflection.source}
+            </footer>
           </blockquote>
 
           <div className="prose-reading space-y-7">
-            {reflection.body.map((paragraph) => (
-              <p key={paragraph}>{paragraph}</p>
-            ))}
+            {reflection.body.length > 0 ? (
+              reflection.body.map((paragraph, index) => (
+                <p key={`${index}-${paragraph.slice(0, 24)}`}>{paragraph}</p>
+              ))
+            ) : (
+              <p>{reflection.quote}</p>
+            )}
           </div>
 
           <div className="my-10 h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent dark:via-white/10" />
-
-          <div className="rounded-3xl border border-ocean-100 bg-ocean-50/80 p-6 dark:border-ocean-200/10 dark:bg-ocean-500/10">
-            <h3 className="font-serif text-2xl text-slate-950 dark:text-white">
-              Para refletir
-            </h3>
-            <p className="mt-3 leading-7 text-slate-700 dark:text-slate-300">
-              Qual parte da sua história você ainda tenta esconder de si mesmo,
-              e que pequeno gesto de honestidade poderia diminuir esse peso
-              hoje?
-            </p>
-          </div>
         </m.article>
 
         {!focusMode && (

@@ -67,10 +67,15 @@ function createQuote(body: string[], excerpt: string) {
 function parseAarjReflection(html: string): Reflection {
   const $ = cheerio.load(html);
 
-  const title = cleanText($("h3.text-primary.text-center").first().text());
+  const container = $(".col-lg-12.col-md-12").first();
+
+  const title = cleanText(
+    container.find("h3.text-primary.text-center").first().text(),
+  );
 
   const dateLabel = cleanText(
-    $("h3.text-primary")
+    container
+      .find("h3.text-primary")
       .filter((_, element) =>
         /^\d{2}\/\d{2}$/.test(cleanText($(element).text())),
       )
@@ -78,18 +83,21 @@ function parseAarjReflection(html: string): Reflection {
       .text(),
   );
 
-  const contentBlocks = $(".col-lg-12.col-md-12 .text-primary")
+  const allTexts = container
+    .find(".text-primary")
     .map((_, element) => cleanText($(element).text()))
     .get()
     .filter(Boolean)
-    .filter((text) => text !== title && text !== dateLabel);
+    .filter((text) => text !== title)
+    .filter((text) => text !== dateLabel)
+    .filter((text) => !/^\d{2}\/\d{2}$/.test(text));
 
-  const [excerpt = "", source = "", ...body] = contentBlocks;
+  const excerpt = allTexts[0] ?? "";
+  const source = allTexts[1] ?? "";
+  const body = allTexts.slice(2);
 
   if (!title || !dateLabel || !excerpt || body.length === 0) {
-    throw new Error(
-      "Não foi possível extrair título, data, chamada ou corpo da reflexão da AARJ.",
-    );
+    throw new Error("Não foi possível extrair a reflexão completa da AARJ.");
   }
 
   const year = getCurrentYearInSourceTimezone();
@@ -110,7 +118,6 @@ function parseAarjReflection(html: string): Reflection {
     tags: ["Reflexão diária", "Só por hoje", "A.A."],
   };
 }
-
 export async function getDailyReflection(): Promise<ReflectionFetchResult> {
   try {
     const response = await fetch(AARJ_REFLECTION_URL, {

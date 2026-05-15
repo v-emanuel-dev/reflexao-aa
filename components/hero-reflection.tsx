@@ -40,9 +40,22 @@ export function HeroReflection({
             </span>
           </div>
 
-          <p className="mt-8 max-w-2xl break-words text-xl leading-8 text-slate-700 dark:text-slate-200 sm:text-2xl sm:leading-9">
-            “{reflection.excerpt}”
-          </p>
+          <div className="space-y-8">
+            {[reflection.excerpt, ...reflection.body].map(
+              (paragraph, index) => (
+                <p
+                  key={`${index}-${paragraph.slice(0, 24)}`}
+                  className="break-words text-xl leading-8 text-slate-700 dark:text-slate-200 sm:text-2xl sm:leading-9"
+                >
+                  {paragraph}
+                </p>
+              ),
+            )}
+
+            <p className="pt-4 text-sm uppercase tracking-[0.18em] text-slate-500 dark:text-slate-400">
+              {reflection.source}
+            </p>
+          </div>
         </m.div>
 
         <m.div
