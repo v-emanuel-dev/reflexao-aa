@@ -1,0 +1,10 @@
+{
+  "name": "Reflexão Diária",
+  "short_name": "Reflexão",
+  "description": "Leitura diária contemplativa e minimalista.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfaf7",
+  "theme_color": "#fbfaf7",
+  "lang": "pt-BR"
+}
