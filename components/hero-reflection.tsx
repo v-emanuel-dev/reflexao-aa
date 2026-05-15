@@ -1,16 +1,40 @@
 "use client";
 
+import { useState } from "react";
 import { m } from "framer-motion";
-import { CalendarDays, Clock3 } from "lucide-react";
+import { CalendarDays, Check, Copy } from "lucide-react";
 import type { Reflection } from "@/data/reflections";
 
 export function HeroReflection({
   reflection,
-  readingMinutes,
 }: {
   reflection: Reflection;
   readingMinutes: number;
 }) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    const fullText = [
+      reflection.title,
+      "",
+      reflection.fullDate,
+      "",
+      reflection.excerpt,
+      "",
+      reflection.source,
+      "",
+      ...reflection.body,
+    ].join("\n");
+
+    await navigator.clipboard.writeText(fullText);
+
+    setCopied(true);
+
+    window.setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
+
   return (
     <section className="relative min-h-screen overflow-hidden px-4 py-12 sm:px-6 md:py-24">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,#dff0ff,transparent_34%),linear-gradient(180deg,#fbfaf7,transparent)] dark:bg-[radial-gradient(circle_at_top_left,rgba(59,143,200,.2),transparent_34%),linear-gradient(180deg,#020617,transparent)]" />
@@ -34,9 +58,14 @@ export function HeroReflection({
             <CalendarDays size={16} /> {reflection.fullDate}
           </span>
 
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-sm dark:bg-white/5">
-            <Clock3 size={16} /> {readingMinutes} min de leitura
-          </span>
+          <button
+            type="button"
+            onClick={handleCopy}
+            className="inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-2 shadow-sm transition hover:bg-white dark:bg-white/5 dark:hover:bg-white/10"
+          >
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+            {copied ? "Copiado" : "Copiar reflexão"}
+          </button>
         </div>
 
         <div className="mt-10 space-y-8">
